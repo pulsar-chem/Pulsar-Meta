@@ -45,7 +45,6 @@ endif()
 set(STAGE_DIR            "${CMAKE_BINARY_DIR}/stage")
 set(STAGE_INSTALL_PREFIX "${STAGE_DIR}${CMAKE_INSTALL_PREFIX}") 
 
-
 ###############################################
 # Dependencies that we are capable of building
 ###############################################
@@ -56,18 +55,30 @@ include("bpprint.cmake")
 include("memwatch.cmake")
 include("pulsar.cmake")
 
+
+#################################
+# Testing of the superbuild
+#################################
 # This file will allow us to run ctest in the top-level build dir
-# Basically it just defers to the actual top-level CTestTestfile.cmake in the
-# build directory for this project
-#file(WRITE ${CMAKE_BINARY_DIR}/CTestTestfile.cmake "subdirs(test_stage)")
+# of the meta superbuild
+#
+# We need to temporarily add paths to some of the dependencies to
+# the LD_LIBRARY_PATH when we are running the test scripts. They currently
+# reside in the stage directory. Even if the RPATHs were set, they should
+# only point to the very final location of the dependencies.
+file(WRITE ${CMAKE_BINARY_DIR}/CTestTestfile.cmake
+    "set(ENV{LD_LIBRARY_PATH} \"${STAGE_INSTALL_PREFIX}/lib:\$ENV{LD_LIBRARY_PATH}\")\n")
+
+# Run the pulsar core tests
+# This is the path to the pulsar external project's build dir
+ExternalProject_Get_Property(pulsar_external BINARY_DIR) 
+file(APPEND ${CMAKE_BINARY_DIR}/CTestTestfile.cmake "subdirs(${BINARY_DIR})\n")
 
 
 #################################
 # Installation of the superbuild
 #################################
 # Installation is basically copying the staging directory
-#install(DIRECTORY ${CMAKE_BINARY_DIR}/stage/${CMAKE_INSTALL_PREFIX}/ 
-#        DESTINATION ${CMAKE_INSTALL_PREFIX} USE_SOURCE_PERMISSIONS)
-
-# Install other files, such as basis set
-#install(DIRECTORY basis DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pulsar)
+install(DIRECTORY ${STAGE_INSTALL_PREFIX}/
+        DESTINATION ${CMAKE_INSTALL_PREFIX}
+        USE_SOURCE_PERMISSIONS)
