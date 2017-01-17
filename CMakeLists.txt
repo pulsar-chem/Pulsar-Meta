@@ -11,7 +11,6 @@ include(ExternalProject)
 # Find them, and make sure the proper flags are being
 # passed into the subprojects
 find_package(MPI REQUIRED)
-find_package(Eigen3 REQUIRED)
 
 
 ############################
@@ -37,6 +36,21 @@ endif()
 # with a slash
 set(STAGE_DIR            "${CMAKE_BINARY_DIR}/stage")
 set(STAGE_INSTALL_PREFIX "${STAGE_DIR}${CMAKE_INSTALL_PREFIX}") 
+
+######################
+# Helper macro
+######################
+# Some arguments to pass to the core project ExternalProject_Add
+# We do it this way since some find_package may have problems if
+# a variable is set, but only to a blank string
+# For example, find_package(PythonInterp) will fail
+# if PYTHON_EXECUTABLE is a blank string
+macro(ADD_EXTRA_ARG extra_arg arg_name)
+    if(${arg_name})
+        set(${extra_arg} ${${extra_arg}}
+                         -D${arg_name}=${${arg_name}})
+    endif()
+endmacro()
 
 ###############################################
 # Dependencies that we are capable of building

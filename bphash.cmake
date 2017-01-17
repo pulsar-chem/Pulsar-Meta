@@ -9,7 +9,7 @@ if(NOT bphash_FOUND)
 
     ExternalProject_Add(bphash_external
         GIT_REPOSITORY https://github.com/bennybp/BPHash.git
-        GIT_TAG ff925de997ba300ce3efcc34087bc4b0cd23c7ce 
+        GIT_TAG 352bd2a2f1cc1a9619f2d83648754aa24a29e966 
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}

@@ -9,7 +9,7 @@ if(NOT bpprint_FOUND)
 
     ExternalProject_Add(bpprint_external
         GIT_REPOSITORY https://github.com/bennybp/BPPrint.git
-        GIT_TAG 4d2583dca1f3ede4efeec2ca4eb9c14c1d83313c 
+        GIT_TAG 7371a33e7b13f9ff1a824222c8984579cf08356a 
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
