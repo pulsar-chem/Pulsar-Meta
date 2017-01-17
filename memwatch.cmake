@@ -9,7 +9,7 @@ if(NOT memwatch_FOUND)
 
     ExternalProject_Add(memwatch_external
         GIT_REPOSITORY https://github.com/bennybp/memwatch.git
-        GIT_TAG 1297237b657bf105225f88ff5994d5c5897be77e 
+        GIT_TAG 24a439d3d64d466f80861c32b50c0d37fc0552b9 
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                    -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
