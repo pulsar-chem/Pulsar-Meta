@@ -24,13 +24,11 @@ endif()
 ExternalProject_Add(pulsar_external
     GIT_REPOSITORY https://github.com/pulsar-chem/Pulsar-Core.git
     GIT_TAG build_polish
+    #SOURCE_DIR /home/ben/programming/pulsar/Pulsar-Core
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                -DCMAKE_BUILD_TYPE=${PULSAR_BUILD_TYPE}
                -DMPI_CXX_COMPILER=${MPI_CXX_COMPILER}
                -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-               -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-               -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}
-               -DCMAKE_CXX_EXTENSIONS=${CMAKE_CXX_EXTENSIONS}
                -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
                ${PULSARMETA_EXTRA_ARGS}
     CMAKE_CACHE_ARGS -DCMAKE_PREFIX_PATH:LIST=${PULSARMETA_CMAKE_PREFIX_PATH}

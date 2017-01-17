@@ -5,13 +5,6 @@ enable_language(C) # For memwatch
 include(ExternalProject)
 
 ############################
-# C++14 by default
-############################
-set(CMAKE_CXX_EXTENSIONS False CACHE BOOL "Enable/Disable compiler-specific C++ extensions")
-set(CMAKE_CXX_STANDARD 14 CACHE STRING "Which C++ standard to use")
-
-
-############################
 # Dependencies
 ############################
 # These are required but not built by the superbuild.
