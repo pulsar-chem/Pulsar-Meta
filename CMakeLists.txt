@@ -5,6 +5,11 @@ enable_language(C) # For memwatch
 include(ExternalProject)
 
 ############################
+# Options
+############################
+option(SKIP_PULSAR "Don't build the pulsar core (useful for core developers)")
+
+############################
 # Dependencies
 ############################
 # These are required but not built by the superbuild.
@@ -60,27 +65,31 @@ include("libtaskforce.cmake")
 include("bphash.cmake")
 include("bpprint.cmake")
 include("memwatch.cmake")
-include("pulsar.cmake")
 
+if(SKIP_PULSAR)
+    message(STATUS "Not building the pulsar core")
+else()
+    include("pulsar.cmake")
 
-#################################
-# Testing of the superbuild
-#################################
-# This file will allow us to run ctest in the top-level build dir
-# of the meta superbuild
-#
-# We need to temporarily add paths to some of the dependencies to
-# the LD_LIBRARY_PATH when we are running the test scripts. They currently
-# reside in the stage directory. Even if the RPATHs were set, they should
-# only point to the very final location of the dependencies.
-file(WRITE ${CMAKE_BINARY_DIR}/CTestTestfile.cmake
-    "set(ENV{LD_LIBRARY_PATH} \"${STAGE_INSTALL_PREFIX}/lib:\$ENV{LD_LIBRARY_PATH}\")\n")
+    #################################
+    # Testing of the superbuild
+    #################################
+    # This file will allow us to run ctest in the top-level build dir
+    # of the meta superbuild
+    #
+    # We need to temporarily add paths to some of the dependencies to
+    # the LD_LIBRARY_PATH when we are running the test scripts. They currently
+    # reside in the stage directory. Even if the RPATHs were set, they should
+    # only point to the very final location of the dependencies.
+    file(WRITE ${CMAKE_BINARY_DIR}/CTestTestfile.cmake
+        "set(ENV{LD_LIBRARY_PATH} \"${STAGE_INSTALL_PREFIX}/lib:\$ENV{LD_LIBRARY_PATH}\")\n")
 
-# Run the pulsar core tests
-# This is the path to the pulsar external project's build dir
-ExternalProject_Get_Property(pulsar_external BINARY_DIR) 
-file(APPEND ${CMAKE_BINARY_DIR}/CTestTestfile.cmake "subdirs(${BINARY_DIR})\n")
+    # Run the pulsar core tests
+    # This is the path to the pulsar external project's build dir
+    ExternalProject_Get_Property(pulsar_external BINARY_DIR) 
+    file(APPEND ${CMAKE_BINARY_DIR}/CTestTestfile.cmake "subdirs(${BINARY_DIR})\n")
 
+endif() # SKIP_PULSAR
 
 #################################
 # Installation of the superbuild
