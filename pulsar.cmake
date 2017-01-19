@@ -16,8 +16,7 @@ ADD_EXTRA_ARG(PULSAR_EXTRA_ARGS EIGEN3_INCLUDE_DIR)
 
 ExternalProject_Add(pulsar_external
     GIT_REPOSITORY https://github.com/pulsar-chem/Pulsar-Core.git
-    GIT_TAG build_polish
-    #SOURCE_DIR /home/ben/programming/pulsar/Pulsar-Core
+    GIT_TAG master
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                -DCMAKE_BUILD_TYPE=${PULSAR_BUILD_TYPE}
                -DMPI_CXX_COMPILER=${MPI_CXX_COMPILER}
