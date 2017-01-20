@@ -31,5 +31,7 @@ Options
                   dependencies. This is useful for core developers, as their changes will
                   only exist locally. Core developers can use this option, and then set
                   `CMAKE_PREFIX_PATH` of the core package to the install directory
-                  given to this meta package.
+                  given to this meta package. Additionally, for the tests to run, you may 
+                  need to set `CMAKE_INSTALL_RPATH` to the lib directry of the install
+                  directory given to meta for the core tests to run.
 
