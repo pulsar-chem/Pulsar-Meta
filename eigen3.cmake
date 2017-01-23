@@ -19,6 +19,6 @@ if(NOT Eigen3_FOUND)
 
 else()
     message(STATUS "Found existing Eigen3")
-    message(STATUS "bphash config: ${Eigen3_CONFIG}")
+    message(STATUS "Eigen3 config: ${Eigen3_CONFIG}")
     add_library(Eigen3_external INTERFACE)
 endif()
