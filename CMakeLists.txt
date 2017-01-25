@@ -65,7 +65,7 @@ include("libtaskforce.cmake")
 include("bphash.cmake")
 include("bpprint.cmake")
 include("memwatch.cmake")
-
+include("eigen3.cmake")
 if(SKIP_PULSAR)
     message(STATUS "Not building the pulsar core")
 else()
