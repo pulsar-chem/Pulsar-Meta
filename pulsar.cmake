@@ -34,5 +34,5 @@ add_dependencies(pulsar_external memwatch_external
                                  bphash_external
                                  bpprint_external
                                  pybind11_external
-                                 libtaskforce_external
+                                 cereal_external
 )
