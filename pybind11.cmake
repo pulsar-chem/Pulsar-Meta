@@ -1,5 +1,6 @@
 include(ExternalProject)
 
+set(Python_ADDITIONAL_VERSIONS "3.7;3.6;3.5;3.4;3.3")
 # Find if it already exists? (it's not required yet)
 find_package(pybind11 QUIET) 
 
@@ -15,6 +16,7 @@ if(NOT pybind11_FOUND)
                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
                    -DPYBIND11_TEST=False
                    -DPYBIND11_INSTALL=True
+                   -DPython_ADDITIONAL_VERSIONS=${Python_ADDITIONAL_VERSIONS}
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
     )
 
