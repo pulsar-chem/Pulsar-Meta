@@ -7,7 +7,7 @@ include(ExternalProject)
 ############################
 # Options
 ############################
-option(SKIP_PULSAR "Don't build the pulsar core (useful for core developers)")
+option(ENABLE_PULSAR "Build the pulsar core" OFF)
 
 ############################
 # Dependencies
@@ -15,8 +15,10 @@ option(SKIP_PULSAR "Don't build the pulsar core (useful for core developers)")
 # These are required but not built by the superbuild.
 # Find them, and make sure the proper flags are being
 # passed into the subprojects
+# C++ and C compilers are found by default
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR})
 find_package(MPI REQUIRED)
-
+find_package(BerkeleyDB REQUIRED)
 
 ############################
 # Build type
@@ -61,14 +63,12 @@ endmacro()
 # Dependencies that we are capable of building
 ###############################################
 include("pybind11.cmake")
-include("libtaskforce.cmake")
+include("cereal.cmake")
 include("bphash.cmake")
 include("bpprint.cmake")
 include("memwatch.cmake")
-
-if(SKIP_PULSAR)
-    message(STATUS "Not building the pulsar core")
-else()
+include("eigen3.cmake")
+if(ENABLE_PULSAR)
     include("pulsar.cmake")
 
     #################################
@@ -88,7 +88,8 @@ else()
     # This is the path to the pulsar external project's build dir
     ExternalProject_Get_Property(pulsar_external BINARY_DIR) 
     file(APPEND ${CMAKE_BINARY_DIR}/CTestTestfile.cmake "subdirs(${BINARY_DIR})\n")
-
+else()
+    message(STATUS "Not building Pulsar-Core")
 endif() # SKIP_PULSAR
 
 #################################
@@ -98,3 +99,16 @@ endif() # SKIP_PULSAR
 install(DIRECTORY ${STAGE_INSTALL_PREFIX}/
         DESTINATION ${CMAKE_INSTALL_PREFIX}
         USE_SOURCE_PERMISSIONS)
+
+
+################################
+# Uninstall of the superbuild
+################################
+# uninstall target
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)

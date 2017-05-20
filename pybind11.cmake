@@ -7,7 +7,7 @@ find_package(pybind11 QUIET)
 # If not found, build it
 if(NOT pybind11_FOUND)
     message(STATUS "Pybind11 not found - we will build it for you")
-
+    ADD_EXTRA_ARG(PULSAR_EXTRA_ARGS PYTHON_EXECUTABLE)
     ExternalProject_Add(pybind11_external
         GIT_REPOSITORY https://github.com/pybind/pybind11.git
         GIT_TAG v2.0.0
@@ -17,6 +17,7 @@ if(NOT pybind11_FOUND)
                    -DPYBIND11_TEST=False
                    -DPYBIND11_INSTALL=True
                    -DPython_ADDITIONAL_VERSIONS=${Python_ADDITIONAL_VERSIONS}
+                   ${PULSAR_EXTRA_ARGS}
         INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install DESTDIR=${STAGE_DIR}
     )
 
