@@ -7,7 +7,10 @@ include(ExternalProject)
 ############################
 # Options
 ############################
-option(ENABLE_PULSAR "Build the pulsar core" OFF)
+option(ENABLE_PULSAR "Build the pulsar core" ON)
+option(ENABLE_LIBINT "Build Pulsar Libint bindings" OFF)
+option(ENABLE_SCF "Build Pulsar SCF bindings" OFF)
+
 
 ############################
 # Dependencies
@@ -19,6 +22,7 @@ option(ENABLE_PULSAR "Build the pulsar core" OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR})
 find_package(MPI REQUIRED)
 find_package(BerkeleyDB REQUIRED)
+find_package(Eigen3 REQUIRED) #CMake can't pull the repo by default
 
 ############################
 # Build type
@@ -67,30 +71,23 @@ include("cereal.cmake")
 include("bphash.cmake")
 include("bpprint.cmake")
 include("memwatch.cmake")
-include("eigen3.cmake")
+
+#############################
+# Framework and supermodules
+#############################
 if(ENABLE_PULSAR)
     include("pulsar.cmake")
-
-    #################################
-    # Testing of the superbuild
-    #################################
-    # This file will allow us to run ctest in the top-level build dir
-    # of the meta superbuild
-    #
-    # We need to temporarily add paths to some of the dependencies to
-    # the LD_LIBRARY_PATH when we are running the test scripts. They currently
-    # reside in the stage directory. Even if the RPATHs were set, they should
-    # only point to the very final location of the dependencies.
-    file(WRITE ${CMAKE_BINARY_DIR}/CTestTestfile.cmake
-        "set(ENV{LD_LIBRARY_PATH} \"${STAGE_INSTALL_PREFIX}/lib:\$ENV{LD_LIBRARY_PATH}\")\n")
-
-    # Run the pulsar core tests
-    # This is the path to the pulsar external project's build dir
-    ExternalProject_Get_Property(pulsar_external BINARY_DIR) 
-    file(APPEND ${CMAKE_BINARY_DIR}/CTestTestfile.cmake "subdirs(${BINARY_DIR})\n")
 else()
     message(STATUS "Not building Pulsar-Core")
 endif() # SKIP_PULSAR
+
+if(ENABLE_LIBINT)
+    include("pulsar_libint.cmake")
+endif()
+
+if(ENABLE_SCF)
+    include("pulsar_scf.cmake")
+endif()
 
 #################################
 # Installation of the superbuild

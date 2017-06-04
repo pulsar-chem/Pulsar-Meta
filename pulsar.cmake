@@ -12,7 +12,6 @@ list(APPEND PULSAR_CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${STAGE_INSTALL_PREFIX
 
 
 ADD_EXTRA_ARG(PULSAR_EXTRA_ARGS PYTHON_EXECUTABLE)
-ADD_EXTRA_ARG(PULSAR_EXTRA_ARGS EIGEN3_INCLUDE_DIR)
 
 ExternalProject_Add(pulsar_external
     GIT_REPOSITORY https://github.com/pulsar-chem/Pulsar-Core.git
@@ -36,3 +35,21 @@ add_dependencies(pulsar_external memwatch_external
                                  pybind11_external
                                  cereal_external
 )
+
+#################################
+# Testing of the superbuild
+#################################
+# This file will allow us to run ctest in the top-level build dir
+# of the meta superbuild
+#
+# We need to temporarily add paths to some of the dependencies to
+# the LD_LIBRARY_PATH when we are running the test scripts. They currently
+# reside in the stage directory. Even if the RPATHs were set, they should
+# only point to the very final location of the dependencies.
+file(WRITE ${CMAKE_BINARY_DIR}/CTestTestfile.cmake
+    "set(ENV{LD_LIBRARY_PATH} \"${STAGE_INSTALL_PREFIX}/lib:\$ENV{LD_LIBRARY_PATH}\")\n")
+
+# Run the pulsar core tests
+# This is the path to the pulsar external project's build dir
+ExternalProject_Get_Property(pulsar_external BINARY_DIR)
+file(APPEND ${CMAKE_BINARY_DIR}/CTestTestfile.cmake "subdirs(${BINARY_DIR})\n")
